@@ -1,0 +1,84 @@
+<!-- Kế thừa lại layout master -->
+<?php $_shouldextend[1]=1; ?>
+
+<!-- Truyền giá trị cho những phần thay đổi -->
+<!-- yield(tên)  ~ section(tên, giá trị) -->
+<?php $this->startSection('title', 'Danh sách khách hàng'); ?>
+
+<!-- yield(tên) ~ section(tên) nội dung endsection -->
+<?php $this->startSection('content-title', "Danh sách khách hàng ($count)"); ?>
+<?php $this->startSection('content'); ?>
+
+<!-- Với blade -->
+<style>
+ a{
+ text-decoration: none;
+ }
+ .div-content{
+ padding: 10px 5px;
+ background-color: white;
+ }
+ .add{
+ float: right;
+ border: 1px solid #0d6efd;
+ padding: 5px;
+ background-color: #0d6efd;
+ color: white;
+ margin-bottom: 10px;
+ }
+ .add:hover{
+ background-color: white;
+ color: #0d6efd;
+ }
+ .add i{
+ margin-right: 5px;
+ }
+ .detail{
+ color: red;
+ }
+</style>
+<div class="div-content">
+ <div>
+ <input type="search" name="keyword" placeholder="Tìm kiếm">
+ <a href=""><i class="fa-solid fa-magnifying-glass"></i></a>
+ <a class="add" href="<?php echo \htmlentities(BASE_URL??'', ENT_QUOTES, 'UTF-8', false); ?>users/create"><i class="fa-regular fa-square-plus"></i>Thêm mới</a>
+ </div>
+ <table class="table table-hover">
+ <thead>
+ <tr>
+ <td><b>#</b></td>
+ <td><b>Name</b></td>
+ <td><b>Email</b></td>
+ <td><b>Avatar</b></td>
+ <td><b>Status</b></td>
+ <td><b>Edit</b></td>
+ </tr>
+ </thead>
+ <tbody>
+ <?php $__currentLoopData = $users; $this->addLoop($__currentLoopData);$this->getFirstLoop();
+ foreach($__currentLoopData as $user): $loop = $this->incrementLoopIndices();  ?>
+ <tr>
+ <td><?php echo \htmlentities($user->id??'', ENT_QUOTES, 'UTF-8', false); ?></td>
+ <td><?php echo \htmlentities($user->name??'', ENT_QUOTES, 'UTF-8', false); ?></td>
+ <td><?php echo \htmlentities($user->email??'', ENT_QUOTES, 'UTF-8', false); ?></td>
+ <td><img src="<?php echo \htmlentities(BASE_URL??'', ENT_QUOTES, 'UTF-8', false); ?><?php echo \htmlentities($user->avatar??'', ENT_QUOTES, 'UTF-8', false); ?>" height="50px"></td>
+ <td><?php echo \htmlentities($user->status ? 'Kích hoạt' : 'Không kích hoạt'??'', ENT_QUOTES, 'UTF-8', false); ?></td>
+ <td>
+ <a href="<?php echo \htmlentities(BASE_URL??'', ENT_QUOTES, 'UTF-8', false); ?>users/edit/<?php echo \htmlentities($user->id??'', ENT_QUOTES, 'UTF-8', false); ?>">
+ <button><i class="fa-solid fa-pen-to-square"></i></button>
+ </a>
+ /
+ <a href="<?php echo \htmlentities(BASE_URL??'', ENT_QUOTES, 'UTF-8', false); ?>users/delete/<?php echo \htmlentities($user->id??'', ENT_QUOTES, 'UTF-8', false); ?>">
+ <button onclick="return confirm('Bạn có muốn xóa không?')"><i class="fa-solid fa-trash-can"></i></button>
+ </a>
+ </td>
+ </tr>
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+ </tbody>
+ </table>
+</div>
+
+
+<?php $this->stopSection(); ?>
+
+<?php if (isset($_shouldextend[1])) { echo $this->runChild('layouts.master'); } ?>

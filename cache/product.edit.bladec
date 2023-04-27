@@ -1,0 +1,83 @@
+<?php $_shouldextend[1]=1; ?>
+
+<?php $this->startSection('title', 'Chỉnh sửa sản phẩm'); ?>
+
+<?php $this->startSection('content-title', 'Chỉnh sửa sản phẩm'); ?>
+<?php $this->startSection('content'); ?>
+
+<style>
+ a{
+ text-decoration: none;
+ }
+
+ .div-content{
+ padding: 10px 20px;
+ background-color: white;
+ margin: 20px 0;
+ }
+
+ form .input1{
+ width: 300px;
+ }
+ 
+ form select{
+ width: 300px;
+ }
+
+ .div-a{
+ border: 1px solid #0d6efd;
+ padding: 5px;
+ background-color: #0d6efd;
+ color: white;
+ }
+ .div-a:hover{
+ background-color: white;
+ color: #0d6efd;
+ }
+</style>
+<a class="div-a" href="<?php echo \htmlentities(BASE_URL??'', ENT_QUOTES, 'UTF-8', false); ?>products">Danh sách</a>
+<div class="div-content">
+ <form action="<?php echo \htmlentities(BASE_URL??'', ENT_QUOTES, 'UTF-8', false); ?>products/update/<?php echo \htmlentities($product->id??'', ENT_QUOTES, 'UTF-8', false); ?>" method="post" enctype="multipart/form-data">
+ <label for="">Name</label>
+ <br>
+ <input class="input1" type="text" value="<?php echo \htmlentities($product->name??'', ENT_QUOTES, 'UTF-8', false); ?>" name="name">
+ <pre></pre>
+ <label for="">Image</label>
+ <br>
+ <input type="file" name="image_url">
+ <pre></pre>
+ <img src="<?php echo \htmlentities(BASE_URL??'', ENT_QUOTES, 'UTF-8', false); ?><?php echo \htmlentities($product->image_url??'', ENT_QUOTES, 'UTF-8', false); ?>" width="400px">
+ <pre></pre>
+ <label for="">Price</label>
+ <br>
+ <input class="input1" type="text" value="<?php echo \htmlentities($product->price??'', ENT_QUOTES, 'UTF-8', false); ?>" name="price">
+ <pre></pre>
+ <label for="">Category</label>
+ <br>
+ <select name="category_id">
+ <?php
+ $conn = mysqli_connect('localhost','root','','MVC_17202');
+ $sql = "SELECT * FROM `categories` WHERE `status` = 1";
+ $result = mysqli_query($conn, $sql);
+ $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+ ?>
+ <?php foreach ($categories as $category) : ?>
+ <?php if ($category['id'] == $product->category_id) : ?>
+ <option value="<?= $category['id'] ?>" selected><?= $category['name'] ?></option>
+ <?php else : ?>
+ <option value="<?= $category['id'] ?>"><?= $category['name'] ?></option>
+ <?php endif ?>
+ <?php endforeach ?>
+ </select>
+ <pre></pre>
+ <label for="">Status</label>
+ <br>
+ <input type="radio" name="status" value="1" <?php echo \htmlentities($product->status == 1 ? 'checked' : ''??'', ENT_QUOTES, 'UTF-8', false); ?>>Kích hoạt
+ <input type="radio" name="status" value="0" <?php echo \htmlentities($product->status == 0 ? 'checked' : ''??'', ENT_QUOTES, 'UTF-8', false); ?>>Không kích hoạt
+ <pre></pre>
+ <button type="submit">Update</button>
+ </form>
+</div>
+
+<?php $this->stopSection(); ?>
+<?php if (isset($_shouldextend[1])) { echo $this->runChild('layouts.master'); } ?>
